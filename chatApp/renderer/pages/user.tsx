@@ -1,19 +1,19 @@
 import React from "react";
 import Head from "next/head";
 import HomeNavigation from "../components/HomeNavigation";
-import ChatRoom from "../components/ChatRoom";
+import UserList from "../components/UserList";
 
-function Chat() {
+function User() {
   return (
     <>
       <Head>
-        <title>chatApp chat</title>
+        <title>chatApp user</title>
       </Head>
       <div className="flex flex-col bg-rad">
-        <ChatRoom />
+        <UserList />
       </div>
     </>
   );
 }
 
-export default Chat;
+export default User;

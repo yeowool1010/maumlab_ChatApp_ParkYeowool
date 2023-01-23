@@ -1,40 +1,44 @@
 import React from "react";
-import Head from "next/head";
 import Link from "next/link";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isLoginState } from "../recoil/authAtom";
 
 function HomeNavigation() {
-  let isLogin = false;
+  const loginState = useRecoilValue(isLoginState);
+  let login = true;
   return (
     <>
       <div>
-        {isLogin ? (
+        {login ? (
           <>
-            <div className="flex">
-              <button className="btn">
-                <Link href="/chat">
-                  <a>채팅방목록</a>
-                </Link>
-              </button>
-              <button className="btn">
+            <div className="flex justify-around bg-mainBg p-5">
+              <div>
+                <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
+                  <Link href="/chat">
+                    <a>채팅방목록</a>
+                  </Link>
+                </button>
+                <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
+                  <Link href="/user">
+                    <a>친구</a>
+                  </Link>
+                </button>
+              </div>
+              <button className="bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
                 <Link href="/home">
-                  <a>유저목록</a>
-                </Link>
-              </button>
-              <button className="btn">
-                <Link href="/login">
                   <a>로그아웃</a>
                 </Link>
               </button>
             </div>
           </>
         ) : (
-          <div className="flex ">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <div className="flex justify-around bg-mainBg p-5">
+            <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
               <Link href="/home">
                 <a className="">로그인</a>
               </Link>
             </button>
-            <button className="btn">
+            <button className="bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
               <Link href="/signup">
                 <a>회원가입</a>
               </Link>
