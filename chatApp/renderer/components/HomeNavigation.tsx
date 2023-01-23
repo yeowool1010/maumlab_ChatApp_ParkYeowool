@@ -32,18 +32,19 @@ function HomeNavigation() {
             </div>
           </>
         ) : (
-          <div className="flex justify-around bg-mainBg p-5">
-            <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
-              <Link href="/home">
-                <a className="">로그인</a>
-              </Link>
-            </button>
-            <button className="bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
-              <Link href="/signup">
-                <a>회원가입</a>
-              </Link>
-            </button>
-          </div>
+          <></>
+          // <div className="flex justify-around bg-mainBg p-5">
+          //   <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
+          //     <Link href="/home">
+          //       <a className="">로그인</a>
+          //     </Link>
+          //   </button>
+          //   <button className="bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
+          //     <Link href="/signup">
+          //       <a>회원가입</a>
+          //     </Link>
+          //   </button>
+          // </div>
         )}
       </div>
     </>
