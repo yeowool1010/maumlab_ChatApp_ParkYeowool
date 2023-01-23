@@ -9,8 +9,8 @@ import HomeNavigation from "../components/HomeNavigation";
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <RecoilRoot>
-      <Component {...pageProps} />
       <HomeNavigation />
+      <Component {...pageProps} />
     </RecoilRoot>
   );
 };
