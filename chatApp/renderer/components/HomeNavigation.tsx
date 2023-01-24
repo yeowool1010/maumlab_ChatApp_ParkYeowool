@@ -1,13 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { isLoginState } from "../recoil/authAtom";
 import UserIcon from "../public/UserIcon";
 
 function HomeNavigation() {
   // 로컬스토리지의 토큰 여부를 확인하여 로그인상태관리
   // 로그인 상태는 전역에서 사용되므로 리코일로 관리
-  const loginState = useRecoilValue(isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   // 임시 로그인허용 상태
   let login = true;
