@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import HomeNavigation from "../components/HomeNavigation";
-import ChatRoom from "../components/ChatRoom";
+import ChatList from "../components/ChatList";
 
 function Chat() {
   return (
@@ -9,8 +9,8 @@ function Chat() {
       <Head>
         <title>chatApp chat</title>
       </Head>
-      <div className="flex flex-col bg-rad">
-        <ChatRoom />
+      <div className="flex flex-col">
+        <ChatList />
       </div>
     </>
   );
