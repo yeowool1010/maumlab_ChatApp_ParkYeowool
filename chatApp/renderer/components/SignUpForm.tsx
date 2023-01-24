@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function SignUpForm() {
   return (
-    <div className="flex justify-center items-center h-screen bg-mainBg">
+    <div className="flex justify-center items-center h-full ">
       <div className="flex flex-col">
         <div className="text-center font-bold text-xl mb-5">회원가입</div>
         <form>
