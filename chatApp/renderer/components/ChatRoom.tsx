@@ -2,11 +2,11 @@ import React from "react";
 import Link from "next/link";
 import ChatIcon from "../public/ChatIcon";
 import GroupChatIcon from "../public/GroupChatIcon";
-interface ChatRoom {
-  selectChatRoomId: number;
-  // user: string[];
-}
-function ChatRoom({ selectChatRoomId }: ChatRoom) {
+// interface ChatRoom {
+//   selectChatRoomId: number;
+//   // user: string[];
+// }
+function ChatRoom(selectChatRoomId: number) {
   const chatRoomDummy = [
     { chatRoomId: 1, user: ["박여울"] },
     { chatRoomId: 2, user: ["홍길동"] },
