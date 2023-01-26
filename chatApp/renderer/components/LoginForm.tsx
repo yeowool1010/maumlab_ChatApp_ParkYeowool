@@ -1,18 +1,19 @@
-import React, { useCallback, useState } from "react";
+import React, { FormEvent, useCallback, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { useRecoilState } from "recoil";
 import { isLoginState } from "../recoil/authAtom";
 
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { db, firebaseAuth } from "../../firebaseconfig";
+import { useRouter } from "next/router";
 
 function LoginForm() {
+  const router = useRouter();
+
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
+  const [user, setUser] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,9 +23,6 @@ function LoginForm() {
 
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
-
-  // const auth = getAuth();
-  // createUserWithEmailAndPassword(auth, email, password);
 
   const onChangePassword = useCallback((e: any) => {
     const passwordRegex = /^().{8,50}$/;
@@ -55,35 +53,30 @@ function LoginForm() {
     }
   }, []);
 
-  const onLoginSubmit = async (e: any) => {
+  const onLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // try {
-    //   const response = await axios.post(
-    //     baseURL + "/auth/signin",
-    //     {
-    //       email: email,
-    //       password: password,
-    //     },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   const { data, status } = response;
-
-    //   if (status === 200) {
-    //     localStorage.setItem("token", data.access_token);
-    //     localStorage.setItem("user", email);
-    //     setEmail("");
-    //     setPassword("");
-    //     alert("로그인 성공🎉");
-    //     navigate("/todo");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   alert("아이디 혹은 비밀번호를 다시 확인 해주세요 :)");
-    // }
+    try {
+      const curUserInfo = await signInWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password
+      );
+      // localStorage.setItem("user", firebaseAuth.currentUser.displayName);
+      setEmail("");
+      setPassword("");
+      setIsLogin(true);
+      router.push("/user");
+      // console.log(curUserInfo);
+      // console.log("로그인 성공🎉");
+    } catch (err) {
+      switch (err.code) {
+        case "auth/invalid-email":
+          alert("잘못된 이메일 주소입니다");
+          break;
+      }
+      // console.error(err);
+      // if (err instanceof Error) alert(err.message);
+    }
   };
 
   return (
@@ -91,8 +84,8 @@ function LoginForm() {
       <Head>
         <title>chatApp Login</title>
       </Head>
-      <div className="flex justify-center items-center h-fit ">
-        <div className="flex flex-col ">
+      <div className="flex justify-center items-center pt-10">
+        <div className="flex flex-col">
           <div className="text-center font-bold text-xl mb-5">로그인</div>
           <form onSubmit={onLoginSubmit}>
             <div className="mb-6">
@@ -139,33 +132,30 @@ function LoginForm() {
               </div>
             </div>
 
-            <Link href="/user">
-              <button
-                type="submit"
-                className="inline-block  bg-btnBg hover:bg-poinPink  text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-              >
-                로그인
-              </button>
-            </Link>
-
-            <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-              <p className="text-center font-semibold mx-4 mb-0">
-                회원이 아니십니까?
-              </p>
-            </div>
-            <Link href="/signup">
-              <button
-                type="submit"
-                className="inline-block  bg-btnBg hover:bg-poinPink  text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-              >
-                회원가입
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="inline-block  bg-btnBg hover:bg-poinPink  text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              data-mdb-ripple="true"
+              data-mdb-ripple-color="light"
+            >
+              로그인
+            </button>
           </form>
+          <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
+            <p className="text-center font-semibold mx-4 mb-0">
+              회원이 아니십니까?
+            </p>
+          </div>
+          <Link href="/signup">
+            <button
+              type="submit"
+              className="inline-block  bg-btnBg hover:bg-poinPink  text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              data-mdb-ripple="true"
+              data-mdb-ripple-color="light"
+            >
+              회원가입
+            </button>
+          </Link>
         </div>
       </div>
     </>
