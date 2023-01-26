@@ -39,7 +39,7 @@ function ChatRoomPage() {
       <div className="flex flex-col h-full ">
         <div className="h-fit p-3">
           <div className="h-fit p-2 mb-2">채팅방</div>
-          <ChatRoom selectChatRoomId={3} />
+          <ChatRoom />
         </div>
       </div>
       <div className="w-full fixed bottom-0">

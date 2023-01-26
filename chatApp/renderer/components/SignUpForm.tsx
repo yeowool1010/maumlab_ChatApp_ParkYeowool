@@ -5,8 +5,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
 
-import CheckModal from "../components/CheckModal";
-
 function SignUpForm() {
   const router = useRouter();
 
@@ -81,17 +79,15 @@ function SignUpForm() {
       setEmail("");
       setPassword("");
       setPasswordConfirm("");
-      // alert(`회원가입에 성공 했습니다! 환영합니다 :)`);
+      alert(`회원가입에 성공 했습니다! 환영합니다 :)`);
       router.push("/home");
     } catch (err) {
-      console.error(err.code);
-      //   alert("이미 있는 이메일 입니다. 다른 이메일로 가입 해 주세요 :) ");
       switch (err.code) {
         case "auth/invalid-email":
-          setErrorMsg("잘못된 이메일 주소입니다");
+          alert("잘못된 이메일 주소입니다");
           break;
         case "auth/email-already-in-use":
-          setErrorMsg("이미 가입되어 있는 계정입니다");
+          alert("이미 가입되어 있는 계정입니다");
           break;
       }
     }
@@ -99,10 +95,7 @@ function SignUpForm() {
 
   return (
     <>
-      {/* <CheckModal>
-        <div>모달입니다{errorMsg}</div>
-      </CheckModal> */}
-      <div className="flex justify-center items-center h-full ">
+      <div className="flex justify-center items-center h-full pt-10">
         <div className="flex flex-col">
           <div className="text-center font-bold text-xl mb-5">회원가입</div>
           <form onSubmit={onSignUpSubmit}>
