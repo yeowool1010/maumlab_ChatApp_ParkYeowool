@@ -2,18 +2,20 @@ import React from "react";
 import Link from "next/link";
 import ChatIcon from "../public/ChatIcon";
 import GroupChatIcon from "../public/GroupChatIcon";
+
 // interface ChatRoom {
 //   selectChatRoomId: number;
 //   // user: string[];
 // }
-function ChatRoom(selectChatRoomId: number) {
+
+function ChatRoom() {
   const chatRoomDummy = [
     { chatRoomId: 1, user: ["박여울"] },
     { chatRoomId: 2, user: ["홍길동"] },
     { chatRoomId: 3, user: ["홍길동", "박여울"] },
     { chatRoomId: 4, user: ["마음이"] },
   ];
-  console.log(selectChatRoomId);
+  // console.log(selectChatRoomId);
 
   return (
     <div className="w-full scrollbar-thin scrollbar-thumb-poinPink scrollbar-track-mainBg overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
