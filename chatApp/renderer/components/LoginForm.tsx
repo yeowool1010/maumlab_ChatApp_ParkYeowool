@@ -1,19 +1,16 @@
 import React, { FormEvent, useCallback, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { useRecoilState } from "recoil";
-import { isLoginState } from "../recoil/authAtom";
 
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { isLoginState } from "../recoil/authAtom";
 
 function LoginForm() {
   const router = useRouter();
-
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-
-  const [user, setUser] = useState("");
+  const [isLoing, setIsLoing] = useRecoilState(isLoginState);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,21 +58,17 @@ function LoginForm() {
         email,
         password
       );
-      // localStorage.setItem("user", firebaseAuth.currentUser.displayName);
+      localStorage.setItem("user", firebaseAuth.currentUser.displayName);
       setEmail("");
       setPassword("");
-      setIsLogin(true);
+      setIsLoing(true);
       router.push("/user");
-      // console.log(curUserInfo);
-      // console.log("로그인 성공🎉");
     } catch (err) {
       switch (err.code) {
         case "auth/invalid-email":
           alert("잘못된 이메일 주소입니다");
           break;
       }
-      // console.error(err);
-      // if (err instanceof Error) alert(err.message);
     }
   };
 
