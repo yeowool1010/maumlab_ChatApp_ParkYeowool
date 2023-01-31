@@ -2,11 +2,14 @@ import React, { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "@firebase/firestore";
 import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
 
 function SignUpForm() {
   const router = useRouter();
+
+  const [name, setName] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,12 +18,23 @@ function SignUpForm() {
   const [emailMessage, setEmailMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState("");
+  const [nameMessage, setNameMessage] = useState("");
 
   const [isEmail, setIsEmail] = useState(false);
+  const [isName, setIsName] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const onChangeName = useCallback((e: any) => {
+    setName(e.target.value);
+    if (e.target.value.length < 2 || e.target.value.length > 5) {
+      setNameMessage("2글자 이상 5글자 미만");
+      setIsName(false);
+    } else {
+      setNameMessage("올바른 이름 형식입니다 :)");
+      setIsName(true);
+    }
+  }, []);
 
   const onChangeEmailCheck = useCallback((e: any) => {
     const idRegex = /@/;
@@ -75,7 +89,11 @@ function SignUpForm() {
         email,
         password
       );
-      console.log(createdUser);
+      await updateProfile(firebaseAuth.currentUser, {
+        displayName: name,
+      });
+
+      setName("");
       setEmail("");
       setPassword("");
       setPasswordConfirm("");
@@ -99,6 +117,26 @@ function SignUpForm() {
         <div className="flex flex-col">
           <div className="text-center font-bold text-xl mb-5">회원가입</div>
           <form onSubmit={onSignUpSubmit}>
+            <div className="mb-6">
+              <input
+                value={name}
+                onChange={onChangeName}
+                type="text"
+                className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                placeholder="닉네임"
+              />
+              <div
+                className={`w-full h-5 text-sm font-bold text-right ${
+                  isName ? "text-poinPink	" : "text-warning"
+                }`}
+              >
+                {name.length > 0 && (
+                  <span className={`message ${isName ? "success" : "error"}`}>
+                    {nameMessage}
+                  </span>
+                )}
+              </div>
+            </div>
             <div className="mb-6">
               <input
                 value={email}
