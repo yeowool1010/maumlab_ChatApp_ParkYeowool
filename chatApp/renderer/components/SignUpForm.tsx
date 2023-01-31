@@ -93,6 +93,13 @@ function SignUpForm() {
         displayName: name,
       });
 
+      await setDoc(doc(db, "userInfo", firebaseAuth.currentUser.uid), {
+        name: name,
+        avatar: firebaseAuth.currentUser.photoURL,
+        createdAt: serverTimestamp(),
+        uid: firebaseAuth.currentUser.uid,
+      });
+
       setName("");
       setEmail("");
       setPassword("");
