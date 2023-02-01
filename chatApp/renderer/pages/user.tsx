@@ -9,6 +9,7 @@ function User() {
       <Head>
         <title>chatApp user</title>
       </Head>
+      <HomeNavigation />
       <div className="flex flex-col bg-rad">
         <UserList />
       </div>

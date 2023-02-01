@@ -9,6 +9,7 @@ function Chat() {
       <Head>
         <title>chatApp chat</title>
       </Head>
+      <HomeNavigation />
       <div className="flex flex-col">
         <ChatList />
       </div>

@@ -5,12 +5,12 @@ import Head from "next/head";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
+import { isShowNav } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
-import { isLoginState } from "../recoil/authAtom";
 
 function LoginForm() {
   const router = useRouter();
-  const [isLoing, setIsLoing] = useRecoilState(isLoginState);
+  const [isShowHomeNav, setIsShoHomeNav] = useRecoilState(isShowNav);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,11 +58,10 @@ function LoginForm() {
         email,
         password
       );
+      router.push("/user");
       localStorage.setItem("user", firebaseAuth.currentUser.displayName);
       setEmail("");
       setPassword("");
-      setIsLoing(true);
-      router.push("/user");
     } catch (err) {
       switch (err.code) {
         case "auth/invalid-email":
