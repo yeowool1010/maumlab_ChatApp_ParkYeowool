@@ -1,5 +1,6 @@
-import React from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import { db } from "../../firebaseconfig";
+import { collection, getDocs } from "@firebase/firestore";
 import ChatIcon from "../public/ChatIcon";
 import GroupChatIcon from "../public/GroupChatIcon";
 
@@ -9,13 +10,27 @@ import GroupChatIcon from "../public/GroupChatIcon";
 // }
 
 function ChatRoom() {
-  const chatRoomDummy = [
-    { chatRoomId: 1, user: ["박여울"] },
-    { chatRoomId: 2, user: ["홍길동"] },
-    { chatRoomId: 3, user: ["홍길동", "박여울"] },
-    { chatRoomId: 4, user: ["마음이"] },
-  ];
-  // console.log(selectChatRoomId);
+  const [chatRoom, setChatRoom] = useState([]);
+
+  let chatRoomList = [];
+
+  useEffect(() => {
+    getDocs(collection(db, "chats"))
+      .then((res) => {
+        res.forEach((doc) => {
+          chatRoomList.push({ id: doc.id, ...doc.data() });
+        });
+      })
+      .then(() => {
+        chatRoomList = chatRoomList.filter(
+          (user) => user.name === localStorage.getItem("user")
+        );
+        setChatRoom(chatRoomList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [db]);
 
   return (
     <div className="w-full scrollbar-thin scrollbar-thumb-poinPink scrollbar-track-mainBg overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
@@ -24,51 +39,19 @@ function ChatRoom() {
         <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
           <text>테스트메세지 상대</text>
         </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
-        <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
-        </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
-        <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
-        </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
-        <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
-        </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
-        <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
-        </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
-        <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
-        </div>
-        <div className="flex justify-end">
-          <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-            <text>테스트메세지 나</text>
-          </div>
-        </div>
+        {chatRoom.map((chatRoom, idx) => {
+          return (
+            <div className="flex justify-end">
+              <p key={chatRoom.name}>{chatRoom.name}</p>
+              <div
+                key={idx}
+                className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 "
+              >
+                <p key={chatRoom.name}>{chatRoom.message}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

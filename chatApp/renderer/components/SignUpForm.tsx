@@ -25,7 +25,7 @@ function SignUpForm() {
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
 
-  const onChangeName = useCallback((e: any) => {
+  const onChangeName = (e: any) => {
     setName(e.target.value);
     if (e.target.value.length < 2 || e.target.value.length > 5) {
       setNameMessage("2글자 이상 5글자 미만");
@@ -34,9 +34,9 @@ function SignUpForm() {
       setNameMessage("올바른 이름 형식입니다 :)");
       setIsName(true);
     }
-  }, []);
+  };
 
-  const onChangeEmailCheck = useCallback((e: any) => {
+  const onChangeEmailCheck = (e: any) => {
     const idRegex = /@/;
 
     const emailCurrent = e.target.value;
@@ -49,9 +49,9 @@ function SignUpForm() {
       setEmailMessage("올바른 이메일 형식이에요 : )");
       setIsEmail(true);
     }
-  }, []);
+  };
 
-  const onChangePassword = useCallback((e: any) => {
+  const onChangePassword = (e: any) => {
     const passwordRegex = /^().{8,50}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
@@ -63,7 +63,7 @@ function SignUpForm() {
       setPasswordMessage("안전한 비밀번호에요 : )");
       setIsPassword(true);
     }
-  }, []);
+  };
 
   const onChangePasswordConfirm = useCallback(
     (e: any) => {
