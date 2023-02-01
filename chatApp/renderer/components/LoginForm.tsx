@@ -1,16 +1,18 @@
-import React, { FormEvent, useCallback, useState } from "react";
+import React, { FormEvent, useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
-import { isShowNav } from "../recoil/authAtom";
-import { useRecoilState } from "recoil";
 
 function LoginForm() {
+  // useEffect(() => {
+  //   document.getElementById("emailInput").focus();
+  // }, []);
+  const focusRef = useRef();
+
   const router = useRouter();
-  const [isShowHomeNav, setIsShoHomeNav] = useRecoilState(isShowNav);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +23,7 @@ function LoginForm() {
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
 
-  const onChangePassword = useCallback((e: any) => {
+  const onChangePassword = (e: any) => {
     const passwordRegex = /^().{8,50}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
@@ -33,9 +35,9 @@ function LoginForm() {
       setPasswordMessage("");
       setIsPassword(true);
     }
-  }, []);
+  };
 
-  const onChangeEmailCheck = useCallback((e: any) => {
+  const onChangeEmailCheck = (e: any) => {
     const idRegex = /@/;
 
     const emailCurrent = e.target.value;
@@ -48,7 +50,7 @@ function LoginForm() {
       setEmailMessage("올바른 이메일 형식이에요 : )");
       setIsEmail(true);
     }
-  }, []);
+  };
 
   const onLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,6 +84,8 @@ function LoginForm() {
           <form onSubmit={onLoginSubmit}>
             <div className="mb-6">
               <input
+                id="emailInput"
+                ref={focusRef}
                 value={email}
                 onChange={onChangeEmailCheck}
                 type="text"
