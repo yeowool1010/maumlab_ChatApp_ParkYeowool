@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../../firebaseconfig";
-import { collection, getDocs, addDoc } from "@firebase/firestore";
+import { db, firebaseAuth } from "../../firebaseconfig";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from "@firebase/firestore";
 import Link from "next/link";
 import ChatIcon from "../public/ChatIcon";
 import GroupChatIcon from "../public/GroupChatIcon";
@@ -8,53 +13,75 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import NewChatModal from "../../renderer/components/NewChatModal";
 import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function ChatRoom() {
+  const [userName, setUserName] = useState<string>("");
+
+  const [user] = useCollection(collection(db, "userInfo"));
+
+  const [snapshot, loading, error] = useCollection(collection(db, "chats"));
+  const chats = snapshot?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const allUser = user?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
   const [isChatModalOpen, setIsChatModalOpen] = useRecoilState(isModalOpen);
   const [chatRoom, setChatRoom] = useState([]);
 
   let chatRoomList = [];
-  const [snapshot, loading, error] = useCollection(collection(db, "chats"));
-  const chats = snapshot?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-  // useEffect(() => {
-  //   getDocs(collection(db, "chats"))
-  //     .then((res) => {
-  //       res.forEach((doc) => {
-  //         chatRoomList.push({ id: doc.id, ...doc.data() });
-  //       });
-  //     })
-  //     .then(() => {
-  //       console.log(chatRoomList);
-  //       chatRoomList = chatRoomList.filter(
-  //         (user) => user.name !== localStorage.getItem("user")
-  //       );
-  //       setChatRoom(chatRoomList);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
-  // const chatExists = (email) =>
-  //   chats?.find(
-  //     (chat) => chat.users.includes(user.email) && chat.users.includes(email)
-  //   );
-
-  // const newChat = async () => {
-  //   const input = prompt("Enter email of chat recipient");
-  //   if (!chatExists(input) && input != user.email) {
-  //     await addDoc(collection(db, "chats"), { users: [user.email, input] });
-  //   }
-  // };
+  useEffect(() => {
+    getDocs(collection(db, "chats"))
+      .then((res) => {
+        res.forEach((doc) => {
+          chatRoomList.push({ id: doc.id, ...doc.data() });
+        });
+      })
+      .then(() => {
+        // chatRoomList = chatRoomList.filter(
+        //   (user) => user.users !== localStorage.getItem("user")
+        // );
+        setChatRoom(chatRoomList);
+        console.log(chatRoomList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userName]);
 
   const showNewChatModal = (e: any) => {
     setIsChatModalOpen(true);
   };
 
+  const getInputUserName = (userName: string) => {
+    setUserName(userName);
+  };
+
+  // const chatExists = (name) =>
+  //   chats?.find(
+  //     (chat) => chat.users.includes(allUser) && chat.users.includes(email)
+  //   );
+
+  const newChat = async (userName) => {
+    const input = userName;
+
+    if (input !== localStorage.getItem("user") && input !== "") {
+      await addDoc(collection(db, "chats"), {
+        users: [input],
+        // message: input,
+        // createdAt: serverTimestamp(),
+        // name: localStorage.getItem("user"),
+      });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-full ">
-      {isChatModalOpen && <NewChatModal />}
+      {isChatModalOpen && (
+        <NewChatModal
+          newChat={() => newChat(userName)}
+          setUserName={getInputUserName}
+        />
+      )}
       <div className="flex flex-col w-full px-3 ">
         <div className="font-bold text-xl mb-5 text-left">채팅</div>
         <div className="flex items-center justify-center ">
@@ -66,25 +93,22 @@ function ChatRoom() {
           </button>
         </div>
         <div className="scrollbar-thin h-[360px] scrollbar-thumb-poinPink scrollbar-track-mainBg overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-          {chatRoom.map((chatRoom, idx) => {
-            return (
-              // 채팅방 아이디로 구분하여 페이지 라우팅
-              <Link href={`/${chatRoom.id}`}>
-                <div
-                  key={idx}
-                  className="flex justify-start items-center bg-white shadow-lg cursor-pointer	 w-full h-10 px-4 mb-2"
-                >
-                  {/* 유저배열의 길이로 그룹톡과 개인톡 아이콘 삼항연산자로 분기 */}
-                  {chatRoom.name.length === 1 ? (
+          {chatRoom
+            // .filter((chatRoom) => chatRoom.users === "")
+            .map((chatRoom, idx) => {
+              return (
+                // 채팅방 아이디로 구분하여 페이지 라우팅
+                <Link href={`/chatRoom/${chatRoom.id}`}>
+                  <div
+                    key={idx}
+                    className="flex justify-start items-center bg-white shadow-lg cursor-pointer	 w-full h-10 px-4 mb-2"
+                  >
                     <ChatIcon />
-                  ) : (
-                    <GroupChatIcon />
-                  )}
-                  <p className="pl-2">{chatRoom.name}</p>
-                </div>
-              </Link>
-            );
-          })}
+                    <p className="pl-2">{chatRoom.users}</p>
+                  </div>
+                </Link>
+              );
+            })}
         </div>
       </div>
     </div>
