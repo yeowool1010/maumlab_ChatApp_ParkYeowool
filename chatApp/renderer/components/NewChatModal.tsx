@@ -1,8 +1,24 @@
 import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
+import { useCollection } from "react-firebase-hooks/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from "@firebase/firestore";
+import { db, firebaseAuth } from "../../firebaseconfig";
 
-function NewChatModal() {
+interface PropsType {
+  setUserName: (userName: string) => void;
+  newChat: () => void;
+}
+
+function NewChatModal({ setUserName, newChat }: PropsType) {
+  const [snapshot, loading, error] = useCollection(collection(db, "userInfo"));
+  const users = snapshot?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  //   console.log(users);
   const [isChatModalOpen, setIsChatModalOpen] = useRecoilState(isModalOpen);
   const [chatRoomInput, setChatRoomInput] = useState("");
 
@@ -15,9 +31,17 @@ function NewChatModal() {
 
   const submitChatRoomInput = (e: any) => {
     e.preventDefault();
-    console.log(chatRoomInput);
-    setChatRoomInput("");
+    // 본인은 대화상대로 추가 할 수 없도록
+    if (
+      chatRoomInput !== localStorage.getItem("user") &&
+      chatRoomInput !== ""
+    ) {
+      setUserName(chatRoomInput);
+      setIsChatModalOpen(false);
+      setChatRoomInput("");
+    }
   };
+
   return (
     <div
       id="authentication-modal"
@@ -57,14 +81,14 @@ function NewChatModal() {
             >
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  email
+                  친구를 검색해서 대화를 시작하세요!
                 </label>
                 <input
                   type="text"
                   name="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="이메일 입력"
+                  placeholder="이름으로 검색"
                   onChange={onChangeInput}
                   value={chatRoomInput}
                 />
@@ -72,6 +96,7 @@ function NewChatModal() {
 
               <button
                 type="submit"
+                onClick={newChat}
                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 채팅방 만들기
