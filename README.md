@@ -32,17 +32,24 @@ yarn dev
 
 ---
 
-- [ ] 회원가입
-- [ ] 로그인
-- [ ] 유저 목록
+- [x] 회원가입
+- [x] 로그인
+- [x] 유저 목록
 - [ ] 1 : 1 채팅
 - [ ] 그룹채팅
 
 ### 데모영상
 
 ---
+✅ 회원가입
+![회원가입](https://user-images.githubusercontent.com/99955022/216093769-67c6b4f5-b48b-47db-9f32-72c89c108ab1.gif)
+</br>
+✅ 로그인
+![로그인](https://user-images.githubusercontent.com/99955022/216093989-9e434ead-e768-488f-9f5f-402409c94ad2.gif)
+</br>
+✅ 로그아웃, 유저목록
+![유저리스트](https://user-images.githubusercontent.com/99955022/216094144-f6ca935c-7e9a-476d-8721-6c8f3662b2f5.gif)
 
-데모영상
 </br>
 </br>
 
@@ -50,20 +57,24 @@ yarn dev
 
 ---
 
-<img src="https://img.shields.io/badge/typescript-61DAFB?style=for-the-badge&logo=typescript&logoColor=black"> ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-DB7093?style=for-the-badge&logo=TailwindCSS&logoColor=white) ![axios](https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white)
-
-react, nextron.js, firebase, git, recoil, tailwindCSS
+- TypeScript </br>
+- react </br>
+- nextron.js </br>
+- firebase </br>
+- git </br>
+- recoil </br>
+- tailwindCSS </br>
 
 </br>
 </br>
 
 ## ✏️Commit Convention
-
-🎉 [init] 프로젝트 개시
-✨ [feat] 기능 및 코드 추가
-🐛 [fix] 버그 수정
-🎨 [structure] 코드 구조/형태 개선
-📝 [docs] 문서 추가/수정
-♻️ [refactor] 코드 리팩토링
-💄 [ui] UI/스타일 파일 추가/수정
-🔥 [remove] 기능 및 코드 제거
+</br>
+🎉 [init] 프로젝트 개시</br>
+✨ [feat] 기능 및 코드 추가</br>
+🐛 [fix] 버그 수정</br>
+🎨 [structure] 코드 구조/형태 개선</br>
+📝 [docs] 문서 추가/수정</br>
+♻️ [refactor] 코드 리팩토링</br>
+💄 [ui] UI/스타일 파일 추가/수정</br>
+🔥 [remove] 기능 및 코드 제거</br>
