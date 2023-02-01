@@ -44,13 +44,17 @@ yarn dev
 
 ---
 ✅ 회원가입
+</br>
 ![회원가입](https://user-images.githubusercontent.com/99955022/216093769-67c6b4f5-b48b-47db-9f32-72c89c108ab1.gif)
-<img src="https://user-images.githubusercontent.com/99955022/216093769-67c6b4f5-b48b-47db-9f32-72c89c108ab1.gif  width="200" height="400"/>
+
 </br>
 ✅ 로그인
+</br>
 ![로그인](https://user-images.githubusercontent.com/99955022/216093989-9e434ead-e768-488f-9f5f-402409c94ad2.gif)
+
 </br>
 ✅ 로그아웃, 유저목록
+</br>
 ![유저리스트](https://user-images.githubusercontent.com/99955022/216094144-f6ca935c-7e9a-476d-8721-6c8f3662b2f5.gif)
 
 </br>
