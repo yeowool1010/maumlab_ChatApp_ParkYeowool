@@ -2,6 +2,8 @@
 
 <br/>
 마음연구소 기술 과제 데스크탑 채팅프로그램
+<br/>
+프로젝트 노션 기록 : https://antique-map-b03.notion.site/_-5be537508be4411f901a9038199d94f3
 </br>
 </br>
 
