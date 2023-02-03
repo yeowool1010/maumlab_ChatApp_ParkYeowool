@@ -7,9 +7,6 @@ import { db, firebaseAuth } from "../../firebaseconfig";
 import { useRouter } from "next/router";
 
 function LoginForm() {
-  // useEffect(() => {
-  //   document.getElementById("emailInput").focus();
-  // }, []);
   const focusRef = useRef();
 
   const router = useRouter();

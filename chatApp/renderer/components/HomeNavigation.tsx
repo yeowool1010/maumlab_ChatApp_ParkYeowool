@@ -17,7 +17,6 @@ function HomeNavigation() {
     localStorage.removeItem("ally-supports-cache");
     router.push("/home");
     setIsShoHomeNav(false);
-    console.log(isShowHomeNav);
   };
 
   const [userLocalStorage, setUserLocalStorage] = useState(null);

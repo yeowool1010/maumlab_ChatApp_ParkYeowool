@@ -2,23 +2,23 @@ import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-} from "@firebase/firestore";
+import { collection } from "@firebase/firestore";
 import { db, firebaseAuth } from "../../firebaseconfig";
+import XIcon from "../public/XIcon";
 
 interface PropsType {
   setUserName: (userName: string) => void;
   newChat: () => void;
 }
 
-function NewChatModal({ setUserName, newChat }: PropsType) {
-  const [snapshot, loading, error] = useCollection(collection(db, "userInfo"));
+interface User {
+  name: string;
+}
+
+function NewChatModal({ setUserName, newChat }: PropsType, { name }: User) {
+  const [snapshot] = useCollection(collection(db, "userInfo"));
   const users = snapshot?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  //   console.log(users);
+  console.log(users);
   const [isChatModalOpen, setIsChatModalOpen] = useRecoilState(isModalOpen);
   const [chatRoomInput, setChatRoomInput] = useState("");
 
@@ -56,19 +56,7 @@ function NewChatModal({ setUserName, newChat }: PropsType) {
             data-modal-hide="authentication-modal"
             onClick={closeModal}
           >
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
+            <XIcon />
           </button>
           <div className="px-6 py-6 lg:px-8">
             <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
@@ -92,6 +80,41 @@ function NewChatModal({ setUserName, newChat }: PropsType) {
                   onChange={onChangeInput}
                   value={chatRoomInput}
                 />
+              </div>
+              <div className="w-full h-full flex items-baseline flex-row flex-wrap ">
+                {/* 여기서부터 선택한 사람들 map */}
+                <div className="mr-2 mb-2 text-white pr-3 pl-2 pm-2 cursor-pointer inline-flex justify-center w-fit h-full hover:bg-red-400 bg-btnOrange rounded-full">
+                  <p className="pb-1">영광</p>
+                  <button className="text-lg ">
+                    <XIcon />
+                  </button>
+                </div>
+                {/* 여기까지 선택한 사람들 map */}
+                {/* 함께하는 사람 텍스트 조건부 보여주기 */}
+                <p className="text-xs   text-white  min-w-fit">
+                  님과 함께합니다
+                </p>
+              </div>
+
+              <div
+                role="menu"
+                className={`w-full ${true && true ? null : "hidden"}`}
+              >
+                <div className="w-full h-full flex items-baseline flex-row flex-wrap flex-rap ">
+                  {/* 여기서부터 검색된 모든 사람들 map */}
+                  {users &&
+                    users.map((users, idx) => {
+                      return (
+                        <button
+                          key={idx}
+                          className="my-1 mr-3 text-white pr-3 pl-2 pm-3 cursor-pointer inline-flex justify-center w-fit h-full  hover:bg-sky-500 bg-underbar rounded-full "
+                        >
+                          {users.name}
+                        </button>
+                      );
+                    })}
+                  {/* 여기까지 검색된 모든 사람들 map */}
+                </div>
               </div>
 
               <button
