@@ -25,7 +25,7 @@ function ChatRoomPage() {
   const q = query(collection(db, `chats/${id}/messages`), orderBy("timestamp"));
   const [messages] = useCollectionData(q);
   const bottomOfChat = useRef();
-  console.log(messages);
+  // console.log(messages);
   const getMessages = () =>
     messages?.map((msg) => {
       const sender = msg.sender === user.email;
