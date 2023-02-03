@@ -35,7 +35,7 @@ function UserList() {
         <div className="w-full scrollbar-thin h-[400px] scrollbar-thumb-poinPink scrollbar-track-mainBg overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
           {user.map((user, idx) => {
             return (
-              <Link href={`/chatRoom/${user.id}`}>
+              <Link key={idx} href={`/chatRoom/${user.id}`}>
                 <div
                   key={idx}
                   className="flex shadow-lg justify-between items-center bg-white cursor-pointer	 w-full h-10 px-4 mb-2"

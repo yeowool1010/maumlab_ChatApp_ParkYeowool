@@ -15,7 +15,7 @@ import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-function ChatRoom() {
+function ChatList() {
   const [userName, setUserName] = useState<string>("");
 
   const [user] = useCollection(collection(db, "userInfo"));
@@ -112,4 +112,4 @@ function ChatRoom() {
   );
 }
 
-export default ChatRoom;
+export default ChatList;

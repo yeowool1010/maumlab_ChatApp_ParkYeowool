@@ -37,7 +37,7 @@ function ChatRoom() {
       <div className="p-2 mb-2"></div>
       <div className="scrollbar-thin h-[300px] scrollbar-thumb-poinPink scrollbar-track-mainBg overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
-          <text>테스트메세지 상대</text>
+          <p>테스트메세지 상대</p>
         </div>
         {chatRoom &&
           chatRoom.map((chatRoom) => {
