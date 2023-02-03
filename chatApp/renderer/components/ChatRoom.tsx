@@ -39,19 +39,18 @@ function ChatRoom() {
         <div className="bg-btnBg  mx-4 text-white font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
           <text>테스트메세지 상대</text>
         </div>
-        {chatRoom.map((chatRoom, idx) => {
-          return (
-            <div className="flex justify-end">
-              <p key={chatRoom.name}>{chatRoom.name}</p>
-              <div
-                key={idx}
-                className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 "
-              >
-                <p key={chatRoom.name}>{chatRoom.message}</p>
+        {chatRoom &&
+          chatRoom.map((chatRoom) => {
+            return (
+              <div key={chatRoom.id} className="flex justify-end">
+                <p>{chatRoom.name}</p>
+
+                <div className="bg-white  mx-4 text-black font-bold py-2 px-4 rounded leading-snug uppercase  shadow-md  hover:shadow-lg  transition duration-150 ease-in-out w-fit max-w-10 ">
+                  <p>{chatRoom.message}</p>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
