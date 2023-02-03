@@ -15,7 +15,7 @@ import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-function ChatRoom() {
+function ChatList() {
   const [userName, setUserName] = useState<string>("");
 
   const [user] = useCollection(collection(db, "userInfo"));
@@ -98,11 +98,8 @@ function ChatRoom() {
             .map((chatRoom, idx) => {
               return (
                 // 채팅방 아이디로 구분하여 페이지 라우팅
-                <Link href={`/chatRoom/${chatRoom.id}`}>
-                  <div
-                    key={idx}
-                    className="flex justify-start items-center bg-white shadow-lg cursor-pointer	 w-full h-10 px-4 mb-2"
-                  >
+                <Link key={idx} href={`/chatRoom/${chatRoom.id}`}>
+                  <div className="flex justify-start items-center bg-white shadow-lg cursor-pointer	 w-full h-10 px-4 mb-2">
                     <ChatIcon />
                     <p className="pl-2">{chatRoom.users}</p>
                   </div>
@@ -115,4 +112,4 @@ function ChatRoom() {
   );
 }
 
-export default ChatRoom;
+export default ChatList;

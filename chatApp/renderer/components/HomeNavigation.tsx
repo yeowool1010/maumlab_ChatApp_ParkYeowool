@@ -8,6 +8,7 @@ import { isShowNav } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 
 function HomeNavigation() {
+  const router = useRouter();
   const [isShowHomeNav, setIsShoHomeNav] = useRecoilState(isShowNav);
 
   const logOut = async () => {
@@ -22,8 +23,6 @@ function HomeNavigation() {
   const [userLocalStorage, setUserLocalStorage] = useState(null);
   useEffect(() => setUserLocalStorage(window.localStorage.user), []);
 
-  const router = useRouter();
-
   return (
     <>
       {userLocalStorage !== null && userLocalStorage ? (
@@ -34,15 +33,21 @@ function HomeNavigation() {
               <div className="ml-3">{userLocalStorage}</div>
             </div>
             <div>
-              <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
-                <Link href="/chat">
-                  <a>채팅방목록</a>
-                </Link>
+              <button
+                onClick={() => {
+                  router.push("/chat");
+                }}
+                className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded"
+              >
+                <a>채팅방목록</a>
               </button>
-              <button className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded">
-                <Link href="/user">
-                  <a>친구</a>
-                </Link>
+              <button
+                onClick={() => {
+                  router.push("/user");
+                }}
+                className="mr-3 bg-btnBg hover:bg-poinPink text-white font-bold py-2 px-4 rounded"
+              >
+                <a>친구</a>
               </button>
             </div>
             <button
