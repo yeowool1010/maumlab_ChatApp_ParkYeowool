@@ -41,7 +41,6 @@ function ChatList() {
         //   (user) => user.users !== localStorage.getItem("user")
         // );
         setChatRoom(chatRoomList);
-        console.log(chatRoomList);
       })
       .catch((error) => {
         console.log(error);
