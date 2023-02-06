@@ -1,6 +1,6 @@
 import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "@firebase/firestore";
 import { db, firebaseAuth } from "../../firebaseconfig";
@@ -11,22 +11,37 @@ interface PropsType {
   newChat: () => void;
 }
 
-interface User {
-  name: string;
+interface userType {
+  id: string;
 }
 
-function NewChatModal({ setUserName, newChat }: PropsType, { name }: User) {
+function NewChatModal({ setUserName, newChat }: PropsType) {
   const [snapshot] = useCollection(collection(db, "userInfo"));
   const users = snapshot?.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  console.log(users);
+
   const [isChatModalOpen, setIsChatModalOpen] = useRecoilState(isModalOpen);
   const [chatRoomInput, setChatRoomInput] = useState("");
+  const [isNotEmpty, setisNotEmpty] = useState(false);
+
+  const [tagList, setTagList] = useState<Array<userType>>([]);
+
+  const filterdUserTags =
+    users &&
+    users.filter((users: { id: string; name: string }) =>
+      users.name.includes(chatRoomInput)
+    );
 
   const closeModal = () => {
     setIsChatModalOpen(false);
   };
   const onChangeInput = (e: any) => {
-    setChatRoomInput(e.target.value);
+    const inputValue = e.target.value;
+    if (inputValue !== "") {
+      setChatRoomInput(inputValue);
+    } else {
+      setisNotEmpty(false);
+      setChatRoomInput("");
+    }
   };
 
   const submitChatRoomInput = (e: any) => {
@@ -39,6 +54,28 @@ function NewChatModal({ setUserName, newChat }: PropsType, { name }: User) {
       setUserName(chatRoomInput);
       setIsChatModalOpen(false);
       setChatRoomInput("");
+    }
+  };
+
+  const Tagging = (e: any) => {
+    const taggedUser = e.target.value;
+    if (!tagList.includes({ id: taggedUser })) {
+      const newTagList = tagList;
+      newTagList.push({ id: taggedUser });
+
+      setTagList([...newTagList]);
+    }
+  };
+
+  const deleteTaggedUser = (id: string) => {
+    for (let i = 0; i < tagList.length; i++) {
+      if (tagList[i].id === id) {
+        setTagList(
+          tagList.filter((element) => {
+            return element.id !== id;
+          })
+        );
+      }
     }
   };
 
@@ -83,36 +120,50 @@ function NewChatModal({ setUserName, newChat }: PropsType, { name }: User) {
               </div>
               <div className="w-full h-full flex items-baseline flex-row flex-wrap ">
                 {/* 여기서부터 선택한 사람들 map */}
-                <div className="mr-2 mb-2 text-white pr-3 pl-2 pm-2 cursor-pointer inline-flex justify-center w-fit h-full hover:bg-red-400 bg-btnOrange rounded-full">
-                  <p className="pb-1">영광</p>
-                  <button className="text-lg ">
-                    <XIcon />
-                  </button>
-                </div>
+                {tagList &&
+                  tagList.map((taggedUser, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => deleteTaggedUser(taggedUser.id)}
+                        className="mr-2 mb-2 text-white pr-3 pl-2 pm-2 cursor-pointer inline-flex justify-center w-fit h-full hover:bg-red-400 bg-btnOrange rounded-full"
+                      >
+                        {taggedUser.id}
+                        <button type="button" className="text-lg ">
+                          <XIcon />
+                        </button>
+                      </div>
+                    );
+                  })}
+
                 {/* 여기까지 선택한 사람들 map */}
-                {/* 함께하는 사람 텍스트 조건부 보여주기 */}
-                <p className="text-xs   text-white  min-w-fit">
-                  님과 함께합니다
-                </p>
+                {/* 님과 대화 시작! 텍스트 조건부 보여주기 */}
+                {tagList.length !== 0 ? (
+                  <p className="text-xs   text-white  min-w-fit">
+                    님과 대화 시작!
+                  </p>
+                ) : null}
               </div>
 
-              <div
-                role="menu"
-                className={`w-full ${true && true ? null : "hidden"}`}
-              >
+              <div role="menu" className={`w-full ${true ? null : "hidden"}`}>
                 <div className="w-full h-full flex items-baseline flex-row flex-wrap flex-rap ">
                   {/* 여기서부터 검색된 모든 사람들 map */}
-                  {users &&
-                    users.map((users, idx) => {
-                      return (
-                        <button
-                          key={idx}
-                          className="my-1 mr-3 text-white pr-3 pl-2 pm-3 cursor-pointer inline-flex justify-center w-fit h-full  hover:bg-sky-500 bg-underbar rounded-full "
-                        >
-                          {users.name}
-                        </button>
-                      );
-                    })}
+                  {filterdUserTags &&
+                    filterdUserTags.map(
+                      (users: { id: string; name: string }, idx) => {
+                        return (
+                          <button
+                            onClick={Tagging}
+                            type="button"
+                            value={users.name}
+                            key={idx}
+                            className="my-1 mr-3 text-white pr-3 pl-2 pm-3 cursor-pointer inline-flex justify-center w-fit h-full  hover:bg-sky-500 bg-underbar rounded-full "
+                          >
+                            {users.name}
+                          </button>
+                        );
+                      }
+                    )}
                   {/* 여기까지 검색된 모든 사람들 map */}
                 </div>
               </div>
