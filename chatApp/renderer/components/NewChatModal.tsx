@@ -7,7 +7,7 @@ import { db, firebaseAuth } from "../../firebaseconfig";
 import XIcon from "../public/XIcon";
 
 interface PropsType {
-  setUserName: (userName: string) => void;
+  setUserName: ([]) => void;
   newChat: () => void;
 }
 
@@ -46,16 +46,24 @@ function NewChatModal({ setUserName, newChat }: PropsType) {
 
   const submitChatRoomInput = (e: any) => {
     e.preventDefault();
-    // 본인은 대화상대로 추가 할 수 없도록
-    if (
-      chatRoomInput !== localStorage.getItem("user") &&
-      chatRoomInput !== ""
-    ) {
-      setUserName(chatRoomInput);
-      setIsChatModalOpen(false);
-      setChatRoomInput("");
-    }
+
+    setUserName(tagList);
+    setIsChatModalOpen(false);
+    setChatRoomInput("");
+    // let sendtags: string = "";
+    // for (let i = 0; i < tagList.length; i++) {
+    //   if (i === tagList.length - 1) {
+    //     sendtags += tagList[i].id;
+    //   } else {
+    //     sendtags += tagList[i].id + ",";
+    //   }
+    //   setUserName(sendtags)
+    // }
   };
+
+  useEffect(() => {
+    setUserName(tagList);
+  }, [tagList]);
 
   const Tagging = (e: any) => {
     const taggedUser = e.target.value;
