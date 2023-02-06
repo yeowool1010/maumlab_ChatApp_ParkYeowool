@@ -15,8 +15,12 @@ import { isModalOpen } from "../recoil/authAtom";
 import { useRecoilState } from "recoil";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+interface userType {
+  id: string;
+}
+
 function ChatList() {
-  const [userName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<Array<userType>>([]);
 
   const [user] = useCollection(collection(db, "userInfo"));
 
@@ -51,27 +55,29 @@ function ChatList() {
     setIsChatModalOpen(true);
   };
 
-  const getInputUserName = (userName: string) => {
-    setUserName(userName);
+  const getInputUserName = (arr: []) => {
+    setUserName(arr);
   };
 
   // const chatExists = (name) =>
   //   chats?.find(
   //     (chat) => chat.users.includes(allUser) && chat.users.includes(email)
   //   );
-
+  // useEffect(() => {
   const newChat = async (userName) => {
     const input = userName;
-
-    if (input !== localStorage.getItem("user") && input !== "") {
-      await addDoc(collection(db, "chats"), {
-        users: [input],
-        // message: input,
-        // createdAt: serverTimestamp(),
-        // name: localStorage.getItem("user"),
-      });
-    }
+    console.log("보내기성공");
+    console.log(input);
+    // if (input !== localStorage.getItem("user") && input !== "") {
+    //   await addDoc(collection(db, "chats"), {
+    //     users: [input],
+    //     // message: input,
+    //     // createdAt: serverTimestamp(),
+    //     // name: localStorage.getItem("user"),
+    //   });
+    // }
   };
+  // }, []);
 
   return (
     <div className="flex justify-center items-center h-full ">
